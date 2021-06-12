@@ -9,7 +9,7 @@ class Login ():
     def __init__(self, tela = tk.Tk()) -> None:
         #config tela
         tela.title("Login")
-        tela.iconbitmap("login.ico")
+        tela.iconbitmap("A:\Pasta-kaique\Gitihub\KaiqueAndeloci\projetoRPG\Imagens\login.ico")
 
         #tamanho da tela
         #tela.geometry("300x300")
