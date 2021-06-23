@@ -21,10 +21,14 @@ class Login ():
 
         tela.mainloop()
 
-a = os.listdir(".")
-for i in a:
-    if i == "Imagens":
+#====================================================
+lista_program = os.listdir(".")
+programa = "Imagens"
+
+for i in lista_program:
+    if i == programa:
         caminho = os.path.abspath(i) + "\login.ico"
+#====================================================
 
 Login()
 
