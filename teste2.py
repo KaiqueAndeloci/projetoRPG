@@ -1,6 +1,6 @@
 import os
 import pygame
-import teste3
+from projetoRPG import teste3
 
 lista_program = os.listdir(".")
 programa = "Imagens"

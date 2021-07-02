@@ -5,6 +5,24 @@ from tkinter.constants import CENTER, W
 #test = tk.Tk()
 #test.winfo_screenheight
 
+#====================================================
+"""
+import os
+for caminho, diretorios, arquivos in os.walk(''):
+    print(caminho)
+    print(diretorios)
+    print(arquivos)
+"""
+
+lista_program = os.listdir(".")
+programa = "Imagens"
+caminho = ""
+
+for i in lista_program:
+    if i == programa:
+        caminho = os.path.abspath(i) + "\login.ico"
+#====================================================
+
 class Login ():
     def __init__(self, tela = tk.Tk()):
         #config tela
@@ -54,22 +72,11 @@ class Login ():
         senha = self.entry_senha.get()
         if user == "adm" and senha == "123":
             print("deu certo")
+        else:
+            pass
 
-#====================================================
-lista_program = os.listdir(".")
-programa = "Imagens"
+    def conectar_BD(self):
+        pass
 
-for i in lista_program:
-    if i == programa:
-        caminho = os.path.abspath(i) + "\login.ico"
-#====================================================
 
 Login()
-
-"""
-import os
-for caminho, diretorios, arquivos in os.walk(''):
-    print(caminho)
-    print(diretorios)
-    print(arquivos)
-"""
