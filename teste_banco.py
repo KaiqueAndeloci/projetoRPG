@@ -1,4 +1,5 @@
 import psycopg2 as db
+import csv
 
 class Config:
     def __init__(self):
@@ -17,8 +18,8 @@ class Config:
 
 class Connection(Config):
     def __init__(self):
-        #super().__init__()
-        Config.__init__(self)
+        super().__init__()
+        #Config.__init__(self)
         try:
             self.conn = db.connect(**self.config["postgres"])
             self.cur = self.conn.cursor()
@@ -55,8 +56,8 @@ class Connection(Config):
 
 class Person(Connection):
     def __init__(self):
-        #super().__init__()
-        Connection.__init__(self)
+        super().__init__()
+        #Connection.__init__(self)
 
     def insert(self, *args):
         try:
@@ -66,7 +67,55 @@ class Person(Connection):
         except Exception as e:
             print("ERRO", e)
 
+    def insert_csv(self, filename):
+        try:
+            data = csv.DictReader(open(filename, encoding = "UTF-8"))
+            for row in data:
+                self.insert(row["name"])
+        except Exception as e:
+            print("ERRO", e)
+
+    def delete(self, id):
+        try:
+            sql_s = f"SELECT * FROM person WHERE id = {id}"
+            if not self.querry(sql_s):
+                return False
+            else:
+                sql_s = f"DELETE FROM person WHERE id = {id}"
+                self.execute(sql_s)
+                self.commit()
+                return True
+
+        except Exception as e:
+            print("ERRO", e)
+
+    def atualizar(self, id, *args):
+        try:
+            sql_command = f"UPDATE person SET name = %s WHERE id = {id}"
+            self.execute(sql_command, args)
+            self.commit()
+        except Exception as e:
+            print("ERRO", e)
+
+    def search(self, *args, type_s = "name"):
+        sql = f"SELECT * FROM person WHERE name LIKE %s"
+        if type_s == "id":
+            sql = f"SELECT * FROM person WHERE id = %s"
+        data = self.querry(sql, args)
+        if data:
+            return data
+        else:
+            return "Not found"
 
 if __name__ == "__main__":
     person = Person()
-    person.insert("Maria")
+    #print(person.querry("SELECT * FROM person")) ___imprime uma tabela do BD
+    #person.insert("joão")
+    #person.insert_csv("caminho.csv")
+    #person.delete(2)
+    #person.atualizar(1, "alterado")
+    #print(person.search(1, type_s="id")
+    #print(person.search("teste")
+
+    #x = f"%{texto_procurado}"
+    #print(person.search("%teste")
