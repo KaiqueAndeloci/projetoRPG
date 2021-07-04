@@ -1,8 +1,11 @@
 import psycopg2 as db
 import csv
+import json_manager as x
 
-class Config:
+
+class Config():
     def __init__(self):
+
         self.config = {
         "postgres":{
             "user": "postgres",
@@ -11,17 +14,27 @@ class Config:
             "port": "5432",
             "database": "pydb"}
         }
-
+        #self.config = conteudo
 """class Connection(Config):
     def __init__(self):
         Config.__init__(self)"""
-
-class Connection(Config):
-    def __init__(self):
-        super().__init__()
+        #super().__init__()
         #Config.__init__(self)
+        
+class Connection():
+    def __init__(self):
+        self.arquivo_procurado = "a.json"
+        self.arquivo = x.jsonManager()
+        self.conteudo = self.arquivo.read(self.arquivo_procurado)
+
+        if self.conteudo == False:
+            print(f"O arquivo {self.arquivo_procurado} não existe.")
+            exit()
+        else:
+            self.config = self.conteudo
+
         try:
-            self.conn = db.connect(**self.config["postgres"])
+            self.conn = db.connect(**self.config)
             self.cur = self.conn.cursor()
         except Exception as e:
             print("ERRO", e)
@@ -110,12 +123,14 @@ class Person(Connection):
 if __name__ == "__main__":
     person = Person()
     #print(person.querry("SELECT * FROM person")) ___imprime uma tabela do BD
-    #person.insert("joão")
+    #person.insert("Rafael")
     #person.insert_csv("caminho.csv")
-    #person.delete(2)
+    #person.delete(6)
     #person.atualizar(1, "alterado")
     #print(person.search(1, type_s="id")
     #print(person.search("teste")
-
     #x = f"%{texto_procurado}"
     #print(person.search("%teste")
+    
+
+    print("terminou")

@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from tkinter.constants import CENTER, W
+from teste_banco import Person
 
 #test = tk.Tk()
 #test.winfo_screenheight
@@ -76,7 +77,8 @@ class Login ():
             pass
 
     def conectar_BD(self):
-        pass
+        teste_banco = Person()
+        teste_banco
 
 
 Login()

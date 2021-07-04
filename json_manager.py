@@ -3,14 +3,13 @@ from os.path import dirname, realpath, isfile
 from json import dump, load
 
 
-class JsonManager():
+class jsonManager():
     def __init__(self):
-        self.path = dirname(realpath(__file__))# + "/"
-        print(path)
+        self.path = dirname(realpath(__file__)) + "/"
     
     def create_json(self, file, dicionario):
         data = dicionario
-        path_data_json = self.path  + "/" + file
+        path_data_json = self.path + file
 
         if not isfile(path_data_json):
             with open(path_data_json, 'w') as f:
@@ -22,7 +21,9 @@ class JsonManager():
     def update(self, file, dicionario):
         pass
     def read(self, file):
-        if isfile(self.path + file):
+        self.arquivo = self.path + file
+        print(self.arquivo)
+        if isfile(self.arquivo):
             with open(self.path + file) as f:
                 data = load(f)
             return data
@@ -30,8 +31,8 @@ class JsonManager():
             return False
 
 if __name__ == '__main__':
-    jmaneger = JsonManager()
+    jmaneger = jsonManager()
     dic = {
         
     }
-    print(jmaneger.create_json("test.json", dic))
+    print(jmaneger.read("teste.json"))
