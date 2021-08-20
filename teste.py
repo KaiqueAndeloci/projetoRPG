@@ -60,7 +60,8 @@ class Login ():
         #self.Tela1.grid(sticky = CENTER)
 
         self.Tela1.pack()
-        self.label_usuario.grid(row = 0, column = 0)
+        self.label_usuario.place(x = 10, y = 3)
+        #self.label_usuario.grid(row = 0, column = 0)
         self.entry_usuario.grid(row = 0, column = 1)
         self.label_senha.grid(row = 1, column = 0)
         self.entry_senha.grid(row = 1, column = 1)
