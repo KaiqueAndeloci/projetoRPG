@@ -24,8 +24,8 @@ class mensagem(pygame.sprite.Sprite):
         pygame.display.set_caption("Mensagem")
 
         #CONFIG DA AREA DE DESENHO
-        self.largura_desenho = int(self.largura - 0.1*self.largura)
-        self.altura_desenho = int(self.altura - 0.1*self.altura)
+        self.largura_desenho = int(0.9*self.largura)
+        self.altura_desenho = int(0.9*self.altura)
 
         self.posicao_x = int((self.largura - self.largura_desenho)/2)
         self.posicao_y = int((self.altura - self.altura_desenho)/2)
@@ -64,6 +64,11 @@ class mensagem(pygame.sprite.Sprite):
         #botao retangular verde cancelar
         botao_cancelar = []
 
+        largura_botoes = 100
+        altura_botoes = 50
+        x_botao_verde = 0
+        y_botao_verde = 0
+
         botao_cancelar.append(int(self.largura*0.85))
         botao_cancelar.append(0)
         botao_cancelar.append(int(self.largura*0.85 + 50))
@@ -80,16 +85,21 @@ class mensagem(pygame.sprite.Sprite):
         #botao amarelo ok
         botao_ok = []
 
-        botao_ok.append(int(self.largura*0.85))
-        botao_ok.append(0)
-        botao_ok.append(int(self.largura*0.85 + 50))
-        botao_ok.append(50)
+        self.largura_botoes = 100
+        self.altura_botoes = 50
+        x_botao_amarelo = int(0.1*self.largura)
+        y_botao_amarelo = int(0.1*self.altura/2)
+
+        botao_ok.append(x_botao_amarelo)
+        botao_ok.append(y_botao_amarelo)
+        botao_ok.append(x_botao_amarelo + self.largura_botoes)
+        botao_ok.append(y_botao_amarelo + self.altura_botoes)
 
         botao = pygame.sprite.Sprite(self.grupo_desenho)
-        botao.image = pygame.Surface((50, 50))
+        botao.image = pygame.Surface((self.largura_botoes, self.altura_botoes))
         botao.image.fill((255, 236, 91))
         botao.rect = botao.image.get_rect()
-        botao.rect = (self.largura_desenho,0)
+        botao.rect = (x_botao_amarelo, y_botao_amarelo)
 
         self.lista_botoes.append(botao_ok)
 

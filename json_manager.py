@@ -30,9 +30,9 @@ class jsonManager():
         else:
             return False
 
-if __name__ == '__main__':
+"""if __name__ == '__main__':
     jmaneger = jsonManager()
     dic = {
         
     }
-    print(jmaneger.read("teste.json"))
+    print(jmaneger.read("teste.json"))"""
