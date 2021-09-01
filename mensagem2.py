@@ -9,21 +9,23 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 #=======
 class mensagem(pygame.sprite.Sprite):
-    def __init__(self, largura, altura, botao_cancelar, botao_ok, botao_sim, botao_nao):
+    def __new__(cls, largura, altura, botao_cancelar, botao_ok, botao_sim_nao, Título, Mensagem, Pergunta, FPS):
+        self = super().__new__(cls)
         pygame.sprite.Sprite.__init__(self)
         pygame.init()
 
         #VARIAVEIS UTEIS
-        self.botoes_utilizados = [botao_cancelar, botao_ok, botao_sim, botao_nao]
+        self.botoes_utilizados = [botao_cancelar, botao_ok, botao_sim_nao, botao_sim_nao]
+        self.legendas = [Título, Mensagem, Pergunta]
 
         #CONFIG DA TELA
-        self.largura = int(largura - 0.7*largura)
-        self.altura = int((altura - 60) - 0.7*(altura - 60))
+        self.largura = int(largura - 0.5*largura)
+        self.altura = int((altura - 60) - 0.5*(altura - 60))
 
         self.tela = pygame.display.set_mode((self.largura, self.altura))
         pygame.display.set_caption("Mensagem")
 
-        #CONFIG DA AREA DE DESENHO
+        #CONFIG DA AREA DE DESENHO AZUL
         self.largura_desenho = int(0.9*self.largura)
         self.altura_desenho = int(0.9*self.altura)
 
@@ -31,132 +33,166 @@ class mensagem(pygame.sprite.Sprite):
         self.posicao_y = int((self.altura - self.altura_desenho)/2)
 
         #FPS
-        self.FPS = 60
+        self.FPS = FPS
         self.relogio = pygame.time.Clock()
 
         #CRIANO OBJETOS
         self.objetos()
 
-        self.loop()
-
-    def Desenhando(self):
-        self.tela.fill((215, 215, 215))
-
-        self.grupo_desenho.draw(self.tela)
-
-        self.tela.blit(self.fps_menagem, (self.posicao_x, self.posicao_y))
-        self.tela.blit(self.titulo, (self.largura_desenho/2, self.altura_desenho*0.2))
-        self.tela.blit(self.mensagem, (self.largura_desenho/2, self.altura_desenho*0.5))
-        self.tela.blit(self.pergunta, (self.largura_desenho/2, self.altura_desenho*0.75))
+        #primeira vez desenhando na tela
+        self.Desenhando()
+        
+        #Loop do game
+        
+        return self.loop()
+        #print(self.retorno)
 
     def objetos(self):
         #criando grupo de objetos
         self.grupo_desenho = pygame.sprite.Group()
+        self.grupo_redeenhavel = pygame.sprite.Group()
         self.lista_botoes = []
+
+        #Todass as cores
+        self.cor_preto = (0, 0, 0)
+        self.cor_cinza = (215, 215, 215)
+        self.cor_verde = ()
+        self.cor_amarelo = ()
+        self.cor_azul = (204, 253, 251)
 
         #retandulo azul
         retangulo = pygame.sprite.Sprite(self.grupo_desenho)
         retangulo.image = pygame.Surface((self.largura_desenho, self.altura_desenho))
-        retangulo.image.fill((204, 253, 251))
+        retangulo.image.fill(self.cor_azul)
         retangulo.rect = retangulo.image.get_rect()
         retangulo.rect.center = (int(self.largura/2), int(self.altura/2))
 
-        #botao retangular verde cancelar
-        botao_cancelar = []
-
-        largura_botoes = 100
-        altura_botoes = 50
-        x_botao_verde = 0
-        y_botao_verde = 0
-
-        botao_cancelar.append(int(self.largura*0.85))
-        botao_cancelar.append(0)
-        botao_cancelar.append(int(self.largura*0.85 + 50))
-        botao_cancelar.append(50)
-
-        botao = pygame.sprite.Sprite(self.grupo_desenho)
-        botao.image = pygame.Surface((50, 50))
-        botao.image.fill((66, 255, 161))
-        botao.rect = botao.image.get_rect()
-        botao.rect = (int(self.largura/2),int(self.altura/2))
-
-        self.lista_botoes.append(botao_cancelar)
-
-        #botao amarelo ok
-        botao_ok = []
-
-        self.largura_botoes = 100
-        self.altura_botoes = 50
-        x_botao_amarelo = int(0.1*self.largura)
-        y_botao_amarelo = int(0.1*self.altura/2)
-
-        botao_ok.append(x_botao_amarelo)
-        botao_ok.append(y_botao_amarelo)
-        botao_ok.append(x_botao_amarelo + self.largura_botoes)
-        botao_ok.append(y_botao_amarelo + self.altura_botoes)
-
-        botao = pygame.sprite.Sprite(self.grupo_desenho)
-        botao.image = pygame.Surface((self.largura_botoes, self.altura_botoes))
-        botao.image.fill((255, 236, 91))
-        botao.rect = botao.image.get_rect()
-        botao.rect = (x_botao_amarelo, y_botao_amarelo)
-
-        self.lista_botoes.append(botao_ok)
-
         #fontes
         fonte_normal = pygame.font.SysFont("arial", 20, False, False)
-        fonte_fps = pygame.font.SysFont("arial", 12, True, False)
+        self.fonte_fps = pygame.font.SysFont("arial", 12, True, False)
+
+        #BOTOES
+        LARGURA = 100
+        ALTURA = 50
+        x_btn1 = int(0.05*self.largura + self.largura_desenho - LARGURA)
+        y_btn1 = int(0.1*self.altura/2 + self.altura_desenho - ALTURA)
+        x_btn2 = int(0.05*self.largura + self.largura_desenho - LARGURA*2 - 5)
+
+        def dois_btn(text_btn1, text_btn2):
+            self.botoes(True, (255, 236, 91), LARGURA, ALTURA, x_btn1, y_btn1, self.grupo_desenho)
+            self.legenda_btn1 = fonte_normal.render(text_btn1, True, self.cor_preto)
+            self.legenda_btn1_pos = self.legenda_btn1.get_rect()
+            self.legenda_btn1_pos.center = (x_btn1 + LARGURA/2, y_btn1 + ALTURA/2)
+                
+            self.botoes(True, (66, 255, 161), LARGURA, ALTURA, x_btn2, y_btn1, self.grupo_desenho)
+            self.legenda_btn2 = fonte_normal.render(text_btn2, True, self.cor_preto)
+            self.legenda_btn2_pos = self.legenda_btn2.get_rect()
+            self.legenda_btn2_pos.center = (x_btn2 + LARGURA/2, y_btn1 + ALTURA/2)
+
+        def um_btn(text_btn):
+            self.botoes(True, (255, 236, 91), LARGURA, ALTURA, x_btn1, y_btn1, self.grupo_desenho)
+            self.legenda_btn1 = fonte_normal.render(text_btn, True, self.cor_preto)
+            self.legenda_btn1_pos = self.legenda_btn1.get_rect()
+            self.legenda_btn1_pos.center = (x_btn1 + LARGURA/2, y_btn1 + ALTURA/2)
+
+        if self.botoes_utilizados == [True, True, False, False]:
+            dois_btn("Cancelar", "Ok")
+        
+        elif self.botoes_utilizados == [False, True, False, False]:
+            um_btn("Ok")
+        
+        elif self.botoes_utilizados == [True, False, False, False]:
+            um_btn("Cancelar")
+
+        elif self.botoes_utilizados == [False, False, True, True]:
+            dois_btn("Não", "Sim")
+
 
         #Legendas
+        self.titulo = fonte_normal.render(self.legendas[0], True, self.cor_preto)
+        self.titulo_posicao = self.titulo.get_rect()
+        self.titulo_posicao.center = (self.largura_desenho/2, self.altura_desenho*0.2)
+
+        self.mensagem = fonte_normal.render(self.legendas[1], True, self.cor_preto)
+        self.mensagem_pos = self.mensagem.get_rect()
+        self.mensagem_pos.center = (self.largura_desenho/2, self.altura_desenho*0.5)
+
+        self.pergunta = fonte_normal.render(self.legendas[2], True, self.cor_preto)
+        self.pergunta_pos = self.pergunta.get_rect()
+        self.pergunta_pos.center = (self.largura_desenho/2, self.altura_desenho*0.75)
+
+    def botoes(self, add_lista, cor, largura_botao, altura_botao, x_botao, y_botao, grupo_desenho):
+        dimensoes_botao = []
+
+        dimensoes_botao.append(x_botao)
+        dimensoes_botao.append(y_botao)
+        dimensoes_botao.append(x_botao + largura_botao)
+        dimensoes_botao.append(y_botao + altura_botao)
+
+        botao = pygame.sprite.Sprite(grupo_desenho)
+        botao.image = pygame.Surface((largura_botao, altura_botao))
+        botao.image.fill((cor))
+        botao.rect = botao.image.get_rect()
+        botao.rect = (x_botao, y_botao)
+
+        if add_lista == True:
+            self.lista_botoes.append(dimensoes_botao)
+        
+    def Redesenhando(self):
+        fps_posicao = (self.posicao_x, self.posicao_y)
+        self.botoes(False, self.cor_azul, 100, 20, fps_posicao[0] + 1, fps_posicao[1] + 1, self.grupo_redeenhavel)
+
         fps_formatado = str(self.relogio).replace("<Clock(", "").replace(")>", "")
-        self.fps_menagem = fonte_fps.render(fps_formatado, True, (0, 0, 0))
+        fps_mensagem = self.fonte_fps.render(fps_formatado, True, self.cor_preto)
 
-        self.titulo = fonte_normal.render("Titulo", True, (0, 0, 0))
+        self.grupo_redeenhavel.draw(self.tela)
+        
+        self.tela.blit(fps_mensagem, fps_posicao)
 
-        self.mensagem = fonte_normal.render("Menagem", True, (0, 0, 0))
+    def Desenhando(self):
+        self.tela.fill(self.cor_cinza)
 
-        self.pergunta = fonte_normal.render("Pergunta", True, (0, 0, 0))
+        self.grupo_desenho.draw(self.tela)
 
-    def esta_em_cima(self, mouse, botao_list): 
+        self.tela.blit(self.titulo, self.titulo_posicao)
+        self.tela.blit(self.mensagem, self.mensagem_pos)
+        self.tela.blit(self.pergunta, self.pergunta_pos)
+
+        if self.botoes_utilizados[0] == True and self.botoes_utilizados[1] == True or self.botoes_utilizados[2] and self.botoes_utilizados[3]:
+            self.tela.blit(self.legenda_btn1, self.legenda_btn1_pos)            
+            self.tela.blit(self.legenda_btn2, self.legenda_btn2_pos)
+        else:
+            self.tela.blit(self.legenda_btn1, self.legenda_btn1_pos) 
+
+    def esta_em_cima(self, mouse, botao_list):
+        x_mouse, y_mouse = mouse[0], mouse[1]
+        contador_botoes = 0
         for botao in botao_list:
-            x_mouse, y_mouse = mouse[0], mouse[1]
-            x_inicial_botao, y_inicial_botao, x_final_botao, y_final_botao = botao[0], botao[1], botao[2], botao[3]
-
-            if x_inicial_botao <= x_mouse and x_mouse <= x_final_botao and y_inicial_botao <= y_mouse and y_mouse <= y_final_botao:
-                return True
+            if botao[0] <= x_mouse and x_mouse <= botao[2] and botao[1] <= y_mouse and y_mouse <= botao[3] and botao_list[contador_botoes] == botao:
+                return contador_botoes
             else:
-                return False
+                contador_botoes =+ 1
 
-    def loop(self):
+    def loop(self) -> int:
         while True:
             self.relogio.tick(self.FPS)
 
+            self.Redesenhando()
+
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    pygame.quit()
-                    exit()
+                    return -1
                 elif event.type == pygame.KEYDOWN:
                     print(event.key)
                 elif event.type == pygame.MOUSEBUTTONUP:
                     posicao = pygame.mouse.get_pos()
 
-                    if self.esta_em_cima(posicao, self.lista_botoes) == True:
-                        print("clicou na area")
+                    if self.esta_em_cima(posicao, self.lista_botoes) == 0:
+                        return 0
+                    elif self.esta_em_cima(posicao, self.lista_botoes) == 1:
+                        return 1
 
-
-            #print(pygame.key.get_pressed())
-
-            #quadrado_cinza = pygame.draw.rect(tela, (215, 215, 215), (0, 0, largura, altura))
-            #pygame.draw.rect(tela, (204, 253, 251), (posicao_x, posicao_y, largura_desenho, altura_desenho))
-            
-
-            self.Desenhando()
             pygame.display.update()
 
-mensagem(screen_width,screen_height,True, True, True, True)
-
-""" 
-elif event.type == pygame.MOUSEWHEEL:
-    #print(pygame.MOUSEWHEEL)
-    #print(event.type)
-    pass"""
+retorno = mensagem(screen_width, screen_height, False, False, True, "Aqui vai o TypeError", "Aqui vai a Traceback", "Aqui vai a pergunta", 30)
+print(retorno)
