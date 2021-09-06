@@ -1,12 +1,12 @@
 from sys import *
 from pygame import *
 #=======
-import tkinter as tk
+#import tkinter as tk
 
 import pygame
-root = tk.Tk()
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
+#root = tk.Tk()
+#screen_width = root.winfo_screenwidth()
+#screen_height = root.winfo_screenheight()
 #=======
 class mensagem(pygame.sprite.Sprite):
     def __new__(cls, largura, altura, botao_cancelar, botao_ok, botao_sim_nao, Título, Mensagem, Pergunta, FPS):
@@ -41,11 +41,8 @@ class mensagem(pygame.sprite.Sprite):
 
         #primeira vez desenhando na tela
         self.Desenhando()
-        
-        #Loop do game
-        
+
         return self.loop()
-        #print(self.retorno)
 
     def objetos(self):
         #criando grupo de objetos
@@ -194,5 +191,4 @@ class mensagem(pygame.sprite.Sprite):
 
             pygame.display.update()
 
-retorno = mensagem(screen_width, screen_height, False, False, True, "Aqui vai o TypeError", "Aqui vai a Traceback", "Aqui vai a pergunta", 30)
-print(retorno)
+#test = mensagem(screen_width, screen_height, True, True, False, "teste", "testando", "teste", 20)
