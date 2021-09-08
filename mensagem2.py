@@ -1,7 +1,7 @@
 from sys import *
 from pygame import *
 #=======
-#import tkinter as tk
+import tkinter as tk
 
 import pygame
 #root = tk.Tk()
@@ -191,4 +191,4 @@ class mensagem(pygame.sprite.Sprite):
 
             pygame.display.update()
 
-#test = mensagem(screen_width, screen_height, True, True, False, "teste", "testando", "teste", 20)
+#print(mensagem(screen_width, screen_height, True, True, False, "teste", "testando", "teste", 20))
