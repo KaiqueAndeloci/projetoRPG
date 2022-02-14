@@ -4,11 +4,15 @@ from pygame import *
 import tkinter as tk
 
 import pygame
+pygame.display.init()
+desktops = pygame.display.get_desktop_sizes()
+print(desktops)
 #root = tk.Tk()
 #screen_width = root.winfo_screenwidth()
 #screen_height = root.winfo_screenheight()
 #=======
-class mensagem(pygame.sprite.Sprite):
+#class mensagem(pygame.sprite.Sprite):
+class mensagem():
     def __new__(cls, largura, altura, botao_cancelar, botao_ok, botao_sim_nao, Título, Mensagem, Pergunta, FPS):
         self = super().__new__(cls)
         pygame.sprite.Sprite.__init__(self)
@@ -191,4 +195,24 @@ class mensagem(pygame.sprite.Sprite):
 
             pygame.display.update()
 
-#print(mensagem(screen_width, screen_height, True, True, False, "teste", "testando", "teste", 20))
+#print(mensagem(screen_width, screen_height, True, True, False, "teste", "testando", "o programa parou de funcionar", 20))
+
+if __name__ == '__main__':
+    """
+    Prepare screen, etc.
+    """
+
+    pygame.display.init()
+    desktops = pygame.display.get_desktop_sizes()
+    # define display/window height based on (the first) desktop size
+    #if desktops[0][1] > 1080:
+    #    disp_size = (960, 1140)
+    #else:
+    #    disp_size = (960, 960)
+    #pygame.display.set_caption('Mensagem')
+    #screen = pygame.display.set_mode(desktops)
+    print(mensagem(desktops[0][0], desktops[0][1], True, True, False, "teste", "testando", "o programa parou de funcionar", 20))
+
+    # exit; close everything
+    pygame.quit()
+    exit()
